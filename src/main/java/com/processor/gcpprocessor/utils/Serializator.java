@@ -50,10 +50,10 @@ public class Serializator {
 
         List<Client> clients = new ArrayList<>();
         Client client = Client.newBuilder()
-                .setId(12345)
+                .setId(1)
                 .setName("Eugen")
-                .setAddress(null)  //NULLABLE
-                .setPhone(null)  //NULLABLE
+                .setAddress("Street st.")  //NULLABLE
+                .setPhone("+1800555128")  //NULLABLE
                 .build();
 
         clients.add(client);
