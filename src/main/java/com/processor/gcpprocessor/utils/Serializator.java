@@ -47,16 +47,18 @@ public class Serializator {
     }
 
     public static void main(final String[] args) throws IOException {
+        List<Client> clients = new ArrayList<>(){
+            {
+                add(Client.newBuilder()
+                        .setId(1)
+                        .setName("Eugen")
+                        .setAddress("Street st.")  //NULLABLE
+                        .setPhone("+1800555128")  //NULLABLE
+                        .build());
 
-        List<Client> clients = new ArrayList<>();
-        Client client = Client.newBuilder()
-                .setId(1)
-                .setName("Eugen")
-                .setAddress("Street st.")  //NULLABLE
-                .setPhone("+1800555128")  //NULLABLE
-                .build();
+            }
+        };
 
-        clients.add(client);
 
         Serializator serializator = new Serializator(clients);
         serializator.serialize();

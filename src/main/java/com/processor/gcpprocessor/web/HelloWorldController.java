@@ -18,7 +18,8 @@ public class HelloWorldController {
     private final FileProcessor fileProcessor;
 
     private final String datasetName = "avrotables";
-    private final String tableName = "table1";
+    private final String tableName1 = "table1";
+    private final String tableName2 = "table2";
     private final String avroSourceUri = "gs://apt-index-293821_cloudbuild/client.avro";
 
     @Autowired
@@ -28,6 +29,6 @@ public class HelloWorldController {
 
     @GetMapping("/")
     String hello() throws IOException {
-        return fileProcessor.runProcessor(datasetName, tableName, avroSourceUri);
+        return fileProcessor.runProcessor(datasetName, tableName1, tableName2, avroSourceUri);
     }
 }

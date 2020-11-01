@@ -18,11 +18,16 @@ public class FileProcessorImpl implements FileProcessor {
 
 
     @Override
-    public String runProcessor(String datasetName, String tableName, String avroSourceUri) {
+    public String runProcessor(String datasetName,
+                               String firstTableName, String secondTableName,
+                               String avroSourceUri) {
         try {
-            TableId tableId = TableId.of(datasetName, tableName);
+            TableId tableId1 = TableId.of(datasetName, firstTableName);
+            TableId tableId2 = TableId.of(datasetName, secondTableName);
+
+
             LoadJobConfiguration loadConfig =
-                    LoadJobConfiguration.newBuilder(tableId, avroSourceUri)
+                    LoadJobConfiguration.newBuilder(tableId1, avroSourceUri)
                             .setFormatOptions(FormatOptions.avro())
                             // Set the write disposition to overwrite existing table data
                             .setWriteDisposition(JobInfo.WriteDisposition.WRITE_APPEND)
@@ -35,7 +40,7 @@ public class FileProcessorImpl implements FileProcessor {
             // Blocks until this load table job completes its execution, either failing or succeeding.
             job = job.waitFor();
             if (job.isDone()) {
-                System.out.println("Table is successfully overwritten by AVRO file loaded from GCS");
+                System.out.println("Table is successfully appended by AVRO file loaded from GCS");
             } else {
                 System.out.println(
                         "BigQuery was unable to load into the table due to an error:"

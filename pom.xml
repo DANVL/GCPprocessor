@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.3.4.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
+
     <groupId>com.processor</groupId>
     <artifactId>gcpprocessor</artifactId>
     <version>0.0.1-SNAPSHOT</version>
@@ -39,12 +42,27 @@
             <artifactId>spring-cloud-gcp-starter-storage</artifactId>
         </dependency>
 
+        <!--BigQuery-->
         <dependency>
             <groupId>com.google.cloud</groupId>
             <artifactId>google-cloud-bigquery</artifactId>
             <version>1.120.0</version>
         </dependency>
 
+        <!--Functions-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-function-adapter-gcp</artifactId>
+            <version>3.0.10.RELEASE</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>com.google.cloud.functions</groupId>
+            <artifactId>functions-framework-api</artifactId>
+            <version>1.0.2</version>
+            <scope>provided</scope>
+        </dependency>
 
         <!--Spring web-->
         <dependency>
@@ -86,10 +104,18 @@
 
     <build>
         <plugins>
-            <plugin>
+<!--            <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
+            </plugin>-->
+
+<!--            <plugin>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>2.8.2</version>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>-->
 
             <plugin>
                 <groupId>org.apache.avro</groupId>
@@ -110,6 +136,37 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <plugin>
+                <!--
+                  Google Cloud Functions Framework Maven plugin
+
+                  This plugin allows you to run Cloud Functions Java code
+                  locally. Use the following terminal command to run a
+                  given function locally:
+
+                  mvn function:run -Drun.functionTarget=your.package.yourFunction
+                -->
+                <groupId>com.google.cloud.functions</groupId>
+                <artifactId>function-maven-plugin</artifactId>
+                <version>0.9.5</version>
+                <configuration>
+                    <functionTarget>com.processor.gcpprocessor.functions.MyLogger</functionTarget>
+                </configuration>
+            </plugin>
+
+
+<!--            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <environmentVariables>
+                        <GOOGLE_APPLICATION_CREDENTIALS>
+                            D:\STUDIES\My First Project-712da06259e6.json
+                        </GOOGLE_APPLICATION_CREDENTIALS>
+                    </environmentVariables>
+                </configuration>
+            </plugin>-->
         </plugins>
     </build>
 
