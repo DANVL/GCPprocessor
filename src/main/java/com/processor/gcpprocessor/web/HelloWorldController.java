@@ -1,5 +1,6 @@
 package com.processor.gcpprocessor.web;
 
+import com.processor.gcpprocessor.config.Constants;
 import com.processor.gcpprocessor.service.FileProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,10 +18,7 @@ public class HelloWorldController {
 
     private final FileProcessor fileProcessor;
 
-    private final String datasetName = "avrotables";
-    private final String tableName1 = "table1";
-    private final String tableName2 = "table2";
-    private final String avroSourceUri = "gs://apt-index-293821_cloudbuild/client.avro";
+
 
     @Autowired
     public HelloWorldController(FileProcessor fileProcessor) {
@@ -29,6 +27,7 @@ public class HelloWorldController {
 
     @GetMapping("/")
     String hello() throws IOException {
-        return fileProcessor.runProcessor(datasetName, tableName1, tableName2, avroSourceUri);
+        return fileProcessor.runProcessor(Constants.DATA_SET, Constants.TABLE_NAME1, Constants.TABLE_NAME2,
+                Constants.AVRO_SOURCE_URI_PATH);
     }
 }

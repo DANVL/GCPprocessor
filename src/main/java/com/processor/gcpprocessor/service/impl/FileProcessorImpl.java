@@ -34,6 +34,8 @@ public class FileProcessorImpl implements FileProcessor {
 
                             .build();
 
+            System.out.println(avroSourceUri);
+
             // Load data from a GCS Avro file into the table
             Job job = bigquery.create(JobInfo.of(loadConfig));
 
