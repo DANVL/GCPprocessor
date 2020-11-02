@@ -3,7 +3,6 @@ package com.processor.gcpprocessor.utils;
 import example.gcp.Client;
 import org.apache.avro.file.DataFileReader;
 import org.apache.avro.file.DataFileWriter;
-import org.apache.avro.io.DatumReader;
 import org.apache.avro.specific.SpecificDatumReader;
 import org.apache.avro.specific.SpecificDatumWriter;
 
@@ -34,7 +33,7 @@ public class Serializator {
             }
             clientDataFileWriter.close();
 
-            DataFileReader<Client> clientDataFileReader = new DataFileReader<>(file,new SpecificDatumReader<>(
+            DataFileReader<Client> clientDataFileReader = new DataFileReader<>(file, new SpecificDatumReader<>(
                     Client.class));
             while (clientDataFileReader.hasNext()) {
                 Client b1 = clientDataFileReader.next();
@@ -47,13 +46,13 @@ public class Serializator {
     }
 
     public static void main(final String[] args) throws IOException {
-        List<Client> clients = new ArrayList<>(){
+        List<Client> clients = new ArrayList<>() {
             {
                 add(Client.newBuilder()
                         .setId(1)
-                        .setName("Gugen")
-                        .setAddress("Street st.")  //NULLABLE
-                        .setPhone(null)  //NULLABLE
+                        .setName("Ivan")
+                        .setAddress(null)  //NULLABLE
+                        .setPhone("+380888888888")  //NULLABLE
                         .build());
 
             }

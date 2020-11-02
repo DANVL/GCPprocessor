@@ -1,5 +1,5 @@
 package com.processor.gcpprocessor.service;
 
-public interface PubSubListener {
+public interface PubSubListenerService {
     void listenToMessages();
 }

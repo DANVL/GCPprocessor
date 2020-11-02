@@ -1,6 +1,6 @@
 package com.processor.gcpprocessor.runner;
 
-import com.processor.gcpprocessor.service.PubSubListener;
+import com.processor.gcpprocessor.service.PubSubListenerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -9,15 +9,15 @@ import org.springframework.stereotype.Component;
 public class CommandLineAppStartupRunner implements CommandLineRunner {
 
 
-    private final PubSubListener pubSubListener;
+    private final PubSubListenerService pubSubListenerService;
 
     @Autowired
-    public CommandLineAppStartupRunner(PubSubListener pubSubListener) {
-        this.pubSubListener = pubSubListener;
+    public CommandLineAppStartupRunner(PubSubListenerService pubSubListenerService) {
+        this.pubSubListenerService = pubSubListenerService;
     }
 
     @Override
     public void run(String...args) {
-        pubSubListener.listenToMessages();
+        pubSubListenerService.listenToMessages();
     }
 }

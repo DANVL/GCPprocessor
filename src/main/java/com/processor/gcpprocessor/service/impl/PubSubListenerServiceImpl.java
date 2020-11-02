@@ -6,25 +6,25 @@ import com.google.cloud.pubsub.v1.Subscriber;
 import com.google.pubsub.v1.ProjectSubscriptionName;
 import com.google.pubsub.v1.PubsubMessage;
 import com.processor.gcpprocessor.config.Constants;
-import com.processor.gcpprocessor.service.FileProcessor;
-import com.processor.gcpprocessor.service.PubSubListener;
+import com.processor.gcpprocessor.service.FileProcessorService;
+import com.processor.gcpprocessor.service.PubSubListenerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.logging.Logger;
 
 @Service
-public class PubSubListenerImpl implements PubSubListener {
+public class PubSubListenerServiceImpl implements PubSubListenerService {
 
-    private final Logger log = Logger.getLogger(PubSubListenerImpl.class.getName());
-    private final FileProcessor fileProcessor;
+    private final Logger log = Logger.getLogger(PubSubListenerServiceImpl.class.getName());
+    private final FileProcessorService fileProcessorService;
 
     @Autowired
-    public PubSubListenerImpl(FileProcessor fileProcessor) {
-        this.fileProcessor = fileProcessor;
+    public PubSubListenerServiceImpl(FileProcessorService fileProcessorService) {
+        this.fileProcessorService = fileProcessorService;
     }
 
-    // Instantiate an asynchronous message receiver.
+    // Instantiate an asynchronous message receiver
     private final MessageReceiver receiver =
             (PubsubMessage message, AckReplyConsumer consumer) -> {
                 listenerOnReceive(message);
@@ -39,23 +39,22 @@ public class PubSubListenerImpl implements PubSubListener {
 
         Subscriber subscriber = Subscriber.newBuilder(subscriptionName, receiver).build();
 
-        // Start the subscriber.
+        // Start the subscriber
         subscriber.startAsync().awaitRunning();
-        System.out.printf("Listening for messages on %s:\n", subscriptionName.toString());
+        log.info("Listening for messages on "+ subscriptionName.toString());
     }
 
+    // Actions on received message
     private void listenerOnReceive(PubsubMessage message) {
         String file = message.getAttributesOrDefault("objectId", "null");
         String event = message.getAttributesOrDefault("eventType","null");
-        System.out.println(event);
 
         if (event.equals("OBJECT_FINALIZE") && file.endsWith(".avro")) {
             log.info("Processing "+file+" file");
-            fileProcessor.runProcessor(Constants.DATA_SET, Constants.TABLE_NAME1, Constants.TABLE_NAME2,
-                    Constants.AVRO_SOURCE_URI_PATH + file);
+            fileProcessorService.runProcessor(Constants.AVRO_SOURCE_URI_PATH + file);
 
         } else if(event.equals("OBJECT_FINALIZE")){
-            log.warning(file+ " end is not .avro. SKIP");
+            log.warning(file+ " extension is not .avro. SKIP");
         }
     }
 }
