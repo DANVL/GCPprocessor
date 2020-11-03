@@ -6,7 +6,9 @@ import com.google.cloud.pubsub.v1.Subscriber;
 import com.google.pubsub.v1.ProjectSubscriptionName;
 import com.google.pubsub.v1.PubsubMessage;
 import com.processor.gcpprocessor.config.Constants;
+import com.processor.gcpprocessor.controller.NotificationsController;
 import com.processor.gcpprocessor.service.FileProcessorService;
+import com.processor.gcpprocessor.service.NotificationService;
 import com.processor.gcpprocessor.service.PubSubListenerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,10 +20,13 @@ public class PubSubListenerServiceImpl implements PubSubListenerService {
 
     private final Logger log = Logger.getLogger(PubSubListenerServiceImpl.class.getName());
     private final FileProcessorService fileProcessorService;
+    private final NotificationService notificationService;
 
     @Autowired
-    public PubSubListenerServiceImpl(FileProcessorService fileProcessorService) {
+    public PubSubListenerServiceImpl(FileProcessorService fileProcessorService,
+                                     NotificationService notificationService) {
         this.fileProcessorService = fileProcessorService;
+        this.notificationService = notificationService;
     }
 
 
@@ -49,7 +54,10 @@ public class PubSubListenerServiceImpl implements PubSubListenerService {
             // Start the subscriber
             subscriber.startAsync();
             log.info("Listening for messages on " + subscriptionName.toString());
+
+
         }catch (Exception e){
+            // Try to catch why ExecutorService shutting down
             e.printStackTrace();
         }
     }
@@ -61,10 +69,12 @@ public class PubSubListenerServiceImpl implements PubSubListenerService {
 
         if (event.equals("OBJECT_FINALIZE") && file.endsWith(".avro")) {
             log.info("Processing "+file+" file");
-            fileProcessorService.runProcessor(Constants.AVRO_SOURCE_URI_PATH + file);
+            //fileProcessorService.runProcessor(Constants.AVRO_SOURCE_URI_PATH + file);
+            notificationService.addNotification("Avro file "+file + " loaded");
 
         } else if(event.equals("OBJECT_FINALIZE")){
             log.warning(file+ " extension is not .avro. SKIP");
+            notificationService.addNotification("Not avro file "+file + " loaded");
         }
     }
 }
