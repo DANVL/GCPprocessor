@@ -68,8 +68,9 @@ public class PubSubListenerServiceImpl implements PubSubListenerService {
         String event = message.getAttributesOrDefault("eventType","null");
 
         if (event.equals("OBJECT_FINALIZE") && file.endsWith(".avro")) {
+            fileProcessorService.runProcessor(Constants.AVRO_SOURCE_URI_PATH + file);
+
             log.info("Processing "+file+" file");
-            //fileProcessorService.runProcessor(Constants.AVRO_SOURCE_URI_PATH + file);
             notificationService.addNotification("Avro file "+file + " loaded");
 
         } else if(event.equals("OBJECT_FINALIZE")){
