@@ -19,7 +19,10 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public void addNotification(String notification) {
-        notifications.addLast(notification);
+        if(notifications.size() > 50){
+            notifications.removeLast();
+        }
+        notifications.push(notification);
     }
 
     @Override
