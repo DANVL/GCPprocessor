@@ -24,24 +24,34 @@ public class PubSubListenerServiceImpl implements PubSubListenerService {
         this.fileProcessorService = fileProcessorService;
     }
 
-    // Instantiate an asynchronous message receiver
-    private final MessageReceiver receiver =
-            (PubsubMessage message, AckReplyConsumer consumer) -> {
-                listenerOnReceive(message);
-                consumer.ack();
-            };
 
 
     @Override
     public void listenToMessages() {
-        ProjectSubscriptionName subscriptionName =
-                ProjectSubscriptionName.of(Constants.PROJECT_ID, Constants.TOPIC_ID);
+        try {
 
-        Subscriber subscriber = Subscriber.newBuilder(subscriptionName, receiver).build();
+            log.info("in listen");
+            ProjectSubscriptionName subscriptionName =
+                    ProjectSubscriptionName.of(Constants.PROJECT_ID, Constants.TOPIC_ID);
 
-        // Start the subscriber
-        subscriber.startAsync().awaitRunning();
-        log.info("Listening for messages on "+ subscriptionName.toString());
+            log.info("ProjectSubscriptionName passed");
+            MessageReceiver receiver =
+                    (PubsubMessage message, AckReplyConsumer consumer) -> {
+                        listenerOnReceive(message);
+                        consumer.ack();
+                    };
+
+            log.info("Receiver passed");
+            Subscriber subscriber = Subscriber.newBuilder(subscriptionName, receiver).build();
+
+            log.info("Subscriber passed");
+
+            // Start the subscriber
+            subscriber.startAsync();
+            log.info("Listening for messages on " + subscriptionName.toString());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     // Actions on received message

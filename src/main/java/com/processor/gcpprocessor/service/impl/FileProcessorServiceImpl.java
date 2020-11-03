@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 @Service
 public class FileProcessorServiceImpl implements FileProcessorService {
 
-    private final Logger log = Logger.getLogger(PubSubListenerServiceImpl.class.getName());
+    private final Logger log = Logger.getLogger(FileProcessorServiceImpl.class.getName());
 
     // Initialize client that will be used to send requests. This client only needs to be created
     // once, and can be reused for multiple requests.
@@ -53,7 +53,7 @@ public class FileProcessorServiceImpl implements FileProcessorService {
 
             log.info("Both tables processed");
 
-        } catch (BigQueryException | InterruptedException e) {
+        } catch (Exception e) {
             log.warning("Column not added during load append \n" + e.toString());
         }
     }
