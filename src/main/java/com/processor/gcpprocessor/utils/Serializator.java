@@ -50,8 +50,8 @@ public class Serializator {
             {
                 add(Client.newBuilder()
                         .setId(1)
-                        .setName("Ivan")
-                        .setAddress(null)  //NULLABLE
+                        .setName("Jack")
+                        .setAddress("Saints st. 5")  //NULLABLE
                         .setPhone("+380888888888")  //NULLABLE
                         .build());
 

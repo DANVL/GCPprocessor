@@ -4,7 +4,6 @@ import com.processor.gcpprocessor.config.Constants;
 import com.processor.gcpprocessor.data.entity.Message;
 import com.processor.gcpprocessor.service.FileProcessorService;
 import com.processor.gcpprocessor.service.MessageService;
-import com.processor.gcpprocessor.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
