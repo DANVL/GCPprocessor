@@ -1,6 +1,6 @@
 package com.processor.gcpprocessor.config;
 
-public class Constants {
+public final class Constants {
 
     // GCP project id
     public static final String PROJECT_ID = "apt-index-293821";
@@ -15,4 +15,14 @@ public class Constants {
 
     // Pub/Sub topic id
     public static final String TOPIC_ID = "clsub";
+
+    //Avro schema
+    public static final String SCHEMA = "{\"type\":\"record\", " +
+            "\"name\":\"Client\", " +
+            "\"fields\":[" +
+            "{\"name\": \"id\", \"type\": \"long\"}, " +
+            "{\"name\": \"name\", \"type\": \"string\"}," +
+            "{\"name\": \"phone\", \"type\": [\"string\",\"null\"]}," +
+            "{\"name\": \"address\", \"type\": [\"string\",\"null\"]}" +
+            "]}";
 }

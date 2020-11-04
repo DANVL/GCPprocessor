@@ -3,6 +3,7 @@ package com.processor.gcpprocessor.service.impl;
 import com.google.cloud.bigquery.Field;
 import com.google.cloud.bigquery.Schema;
 import com.google.cloud.bigquery.StandardSQLTypeName;
+import com.processor.gcpprocessor.config.Constants;
 import com.processor.gcpprocessor.service.SchemaService;
 import org.springframework.stereotype.Service;
 
@@ -17,16 +18,8 @@ public class SchemaServiceImpl implements SchemaService {
 
     @Override
     public Schema nonOptionalSchema(){
-        org.apache.avro.Schema schema = null;
-
-        try {
-            //Getting AVRO schema
-            schema = new org.apache.avro.Schema.Parser()
-                    .parse(new File("src/main/resources/avro/Client.avsc"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        org.apache.avro.Schema schema = new org.apache.avro.Schema.Parser()
+                    .parse(Constants.SCHEMA);
 
         //Extracting non-optional fields
         List<Field> bqFields = new ArrayList<>();
@@ -61,6 +54,4 @@ public class SchemaServiceImpl implements SchemaService {
 
         }
     }
-
-
 }
